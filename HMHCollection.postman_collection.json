@@ -1,0 +1,1052 @@
+{
+	"info": {
+		"_postman_id": "3a0e96f4-e2af-4f5f-9705-327de42ca35d",
+		"name": "HMHCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ListQuote",
+			"item": [
+				{
+					"name": "[TC_LQ_003]Get The List of Random  Quotes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check page equals 1 and 25 quotes are loaded on a single page\",function(){\r",
+									"    pm.expect(response.page).to.eql(1);\r",
+									"    pm.expect(response.quotes.length).to.eql(25);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_LQ_004]Get The List of Quotes based on keyword \"funny\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Check Word funny in each quotes body\",function(){\r",
+									" \r",
+									"    if(pm.expect(response.quotes.length).greaterThan(1)){\r",
+									"         for(var i=0;i<response.quotes.length;i++){\r",
+									"         pm.expect(response.quotes[i].body.toLowerCase()).contains(\"funny\");\r",
+									"        }\r",
+									"    }\r",
+									"    else{\r",
+									"        console.log(\"No Quotes\");\r",
+									"    }\r",
+									"})\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes/?filter=funny",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes",
+								""
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "funny"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_LQ_005]No List of Quotes should be return on blank or empty filter value",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Will return id=0 if filter value is blank or not provided\",function(){\r",
+									"pm.expect(response.quotes[0].id).to.eql(0);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes/?filter=",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes",
+								""
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_LQ_006]Get The List of Quotes based on tag name  \"funny\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check Word funny in each quotes tag\",function(){\r",
+									" \r",
+									"    if(pm.expect(response.quotes.length).greaterThan(1)){\r",
+									"\r",
+									"        response.quotes.forEach(item=>{\r",
+									"            pm.expect(item.tags).contains(\"funny\");\r",
+									"})\r",
+									"    }\r",
+									"    else{\r",
+									"        console.log(\"No Quotes\");\r",
+									"    }\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes/?filter=funny&type=tag",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes",
+								""
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "funny"
+								},
+								{
+									"key": "type",
+									"value": "tag"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_LQ_007]Get the List of quote  by the author name -  \"Mark Twain\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Check Word Mark Twain in each quotes author \",function(){\r",
+									" \r",
+									"    if(pm.expect(response.quotes.length).greaterThan(1)){\r",
+									"         for(var i=0;i<response.quotes.length;i++){\r",
+									"         pm.expect(response.quotes[i].author).to.eql(\"Mark Twain\");\r",
+									"        }\r",
+									"    }\r",
+									"    else{\r",
+									"        console.log(\"No Quotes\");\r",
+									"    }\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes/?filter=Mark+Twain&type=author",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes",
+								""
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "Mark+Twain"
+								},
+								{
+									"key": "type",
+									"value": "author"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_LQ_008]Create a user session for specific API Key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Get the session token and assign it to a collection variable\",function(){\r",
+									"    pm.collectionVariables.set(\"USER_SESSION_TOKEN\", response['User-Token']);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n  \"user\": {\r\n    \"login\": \"testing123@gmail.com\",\r\n    \"password\": \"Testing@123\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/session",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"session"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_LQ_003]Get The List of Random  Quotes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"var noOfQuotes =  response.quotes.length;\r",
+									"\r",
+									"pm.test(\"Check page equals 1 and quotes array is not empty\",function(){\r",
+									"    pm.expect(response.page).to.eql(1);\r",
+									"    pm.expect(noOfQuotes).not.eql(0);\r",
+									"})\r",
+									"\r",
+									"//random number to select random quotes\r",
+									"var randomInt =  parseInt( Math.floor(Math.random() * (noOfQuotes-1)));\r",
+									"\r",
+									"\r",
+									"pm.test(\"Get a id of a quote which you want to mark as favourite\",function(){\r",
+									"    pm.collectionVariables.set(\"HideId\", response.quotes[randomInt].id);\r",
+									"    \r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_LQ_009]Mark a quote as a  Hidden",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Check whether the correct id is marked as favourite\",function(){\r",
+									" pm.expect(pm.collectionVariables.get(\"HideId\")).to.eql(response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check whether the favourite is equal to True\",function(){\r",
+									"    pm.expect(response.user_details.hidden).to.eql(true);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							},
+							{
+								"key": "User-Token",
+								"value": "{{USER_SESSION_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes/{{HideId}}/hide",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes",
+								"{{HideId}}",
+								"hide"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_LQ_010]Check if the user have hidden any quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check whether the correct id is present\",function(){\r",
+									" \r",
+									"    if(pm.expect(response.quotes.length).greaterThan(1)){\r",
+									"\r",
+									"        response.quotes.forEach(item=>{\r",
+									"            if(parseInt(item.id)==(pm.collectionVariables.get(\"HideId\"))){\r",
+									"                Console.log(\"The expected id is marked as hidden\")\r",
+									"            }\r",
+									"})\r",
+									"    }\r",
+									"    else{\r",
+									"        console.log(\"No Hidden Quotes\");\r",
+									"    }\r",
+									"})\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							},
+							{
+								"key": "User-Token",
+								"value": "{{USER_SESSION_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes/?hidden=1",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes",
+								""
+							],
+							"query": [
+								{
+									"key": "hidden",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_LQ_011]public quotes favorited by user 'gose'",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check whether quotes return by the request have favorite count not equal to 0\",function(){\r",
+									" if(pm.expect(response.quotes.length).greaterThan(1)){\r",
+									"         for(var i=0;i<response.quotes.length;i++){\r",
+									"         pm.expect(response.quotes[i].favorites_count).to.not.eql(0);\r",
+									"        }\r",
+									"    }\r",
+									"    else{\r",
+									"        console.log(\"favorites_count is zero\");\r",
+									"    }\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							},
+							{
+								"key": "User-Token",
+								"value": "{{USER_SESSION_TOKEN}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes/?filter=gose&type=user",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes",
+								""
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": "gose"
+								},
+								{
+									"key": "type",
+									"value": "user"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FavouriteQuote",
+			"item": [
+				{
+					"name": "[TC_FQ_004]Get The List of Random  Quotes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"var noOfQuotes =  response.quotes.length;\r",
+									"\r",
+									"pm.test(\"Check page equals 1 and quotes array is not empty\",function(){\r",
+									"    pm.expect(response.page).to.eql(1);\r",
+									"    pm.expect(noOfQuotes).not.eql(0);\r",
+									"})\r",
+									"\r",
+									"//random number to select random quotes\r",
+									"var randomInt =  parseInt( Math.floor(Math.random() * (noOfQuotes-1)));\r",
+									"\r",
+									"pm.test(\"Get a id of a quote which you want to mark as favourite\",function(){\r",
+									"    pm.collectionVariables.set(\"FavId\", response.quotes[randomInt].id);\r",
+									"    \r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_FQ_005]Mark a quote as a  Favourite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Check whether the correct id is marked as favourite\",function(){\r",
+									" pm.expect(pm.collectionVariables.get(\"FavId\")).to.eql(response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check whether the favourite is equal to True\",function(){\r",
+									"    pm.expect(response.user_details.favorite).to.eql(true);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							},
+							{
+								"key": "User-Token",
+								"value": "{{USER_SESSION_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes/{{FavId}}/fav",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes",
+								"{{FavId}}",
+								"fav"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_FQ_004]Get The List of Random  Quotes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"var noOfQuotes =  response.quotes.length;\r",
+									"\r",
+									"pm.test(\"Check page equals 1 and quotes array is not empty\",function(){\r",
+									"    pm.expect(response.page).to.eql(1);\r",
+									"    pm.expect(noOfQuotes).not.eql(0);\r",
+									"})\r",
+									"\r",
+									"//random number to select random quotes\r",
+									"var randomInt =  parseInt( Math.floor(Math.random() * (noOfQuotes-1)));\r",
+									"\r",
+									"\r",
+									"pm.test(\"Get a id of a quote which you want to mark as Unfavourite\",function(){\r",
+									"    pm.collectionVariables.set(\"UnfavId\", response.quotes[randomInt].id);\r",
+									"    \r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_FQ_006]Mark a quote as a  Unfavourite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Check whether the correct id is marked as favourite\",function(){\r",
+									" pm.expect(pm.collectionVariables.get(\"UnfavId\")).to.eql(response.id);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check whether the favourite is equal to False\",function(){\r",
+									"    pm.expect(response.user_details.favorite).to.eql(false);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							},
+							{
+								"key": "User-Token",
+								"value": "{{USER_SESSION_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/quotes/{{UnfavId}}/unfav",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"quotes",
+								"{{UnfavId}}",
+								"unfav"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TC_FQ_007]Delete  user session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const response = pm.response.json();\r",
+									"// console.log(response['User-Token']);\r",
+									"\r",
+									"pm.test(\"Check message User logged Out\",function(){\r",
+									"pm.expect(response.message).to.eql(\"User logged out.\");\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token token=\"{{YOUR_APP_TOKEN}}\"",
+								"type": "text"
+							},
+							{
+								"key": "User-Token",
+								"value": "{{USER_SESSION_TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Url}}/session",
+							"host": [
+								"{{Url}}"
+							],
+							"path": [
+								"session"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "YOUR_APP_TOKEN",
+			"value": "2cd185f49536786e2d6dad06a80b8b68"
+		},
+		{
+			"key": "Url",
+			"value": "https://favqs.com/api"
+		},
+		{
+			"key": "USER_SESSION_TOKEN",
+			"value": ""
+		},
+		{
+			"key": "FavId",
+			"value": ""
+		},
+		{
+			"key": "UnfavId",
+			"value": ""
+		},
+		{
+			"key": "HideId",
+			"value": ""
+		}
+	]
+}
